@@ -70,15 +70,16 @@ export default function App() {
   const [showThemeSettings, setShowThemeSettings] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [isExporting, setIsExporting] = useState(false);
-  const [pdfSections, setPdfSections] = useState({
-    informasiUmum: true,
-    identifikasi: true,
-    desainPembelajaran: true,
-    deskripsiKegiatan: true,
-    langkahKegiatan: true,
-    asesmen: true,
-    lampiran: true
-  });
+  const [pdfSections, setPdfSections] = useState([
+    { id: 'informasiUmum', label: 'Info Umum', enabled: true },
+    { id: 'identifikasi', label: 'Identifikasi', enabled: true },
+    { id: 'desainPembelajaran', label: 'Desain KBC', enabled: true },
+    { id: 'deskripsiKegiatan', label: 'Deskripsi AI', enabled: true },
+    { id: 'langkahKegiatan', label: 'Langkah JP', enabled: true },
+    { id: 'asesmen', label: 'Asesmen', enabled: true },
+    { id: 'lampiran', label: 'Lampiran', enabled: true }
+  ]);
+  const [showPageNumbers, setShowPageNumbers] = useState(true);
   const [showPdfOptions, setShowPdfOptions] = useState(false);
   const [notification, setNotification] = useState<{ message: string; show: boolean }>({ message: '', show: false });
 
@@ -167,8 +168,17 @@ export default function App() {
     }
   };
 
-  const togglePdfSection = (key: keyof typeof pdfSections) => {
-    setPdfSections(prev => ({ ...prev, [key]: !prev[key] }));
+  const togglePdfSection = (id: string) => {
+    setPdfSections(prev => prev.map(s => s.id === id ? { ...s, enabled: !s.enabled } : s));
+  };
+
+  const moveSection = (index: number, direction: 'up' | 'down') => {
+    const newSections = [...pdfSections];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newSections.length) return;
+    
+    [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
+    setPdfSections(newSections);
   };
 
   const exportToPdf = async () => {
@@ -232,12 +242,28 @@ export default function App() {
       const pageHeight = pdf.internal.pageSize.getHeight();
 
       pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      
+      if (showPageNumbers) {
+        pdf.setFontSize(8);
+        pdf.setTextColor(150);
+        pdf.text(`Halaman 1`, pdfWidth - 20, pageHeight - 10);
+      }
+
       heightLeft -= pageHeight;
+      let pageCount = 1;
 
       while (heightLeft >= 0) {
+        pageCount++;
         position = heightLeft - pdfHeight;
         pdf.addPage();
         pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+        
+        if (showPageNumbers) {
+          pdf.setFontSize(8);
+          pdf.setTextColor(150);
+          pdf.text(`Halaman ${pageCount}`, pdfWidth - 20, pageHeight - 10);
+        }
+        
         heightLeft -= pageHeight;
       }
 
@@ -506,26 +532,51 @@ export default function App() {
                     exit={{ opacity: 0, height: 0 }}
                     className="flex flex-col gap-1 pl-4 mb-2 overflow-hidden bg-black/20 rounded-xl p-3 border border-white/5"
                   >
-                    {[
-                      { key: 'informasiUmum', label: 'Info Umum' },
-                      { key: 'identifikasi', label: 'Identifikasi' },
-                      { key: 'desainPembelajaran', label: 'Desain KBC' },
-                      { key: 'deskripsiKegiatan', label: 'Deskripsi AI' },
-                      { key: 'langkahKegiatan', label: 'Langkah JP' },
-                      { key: 'asesmen', label: 'Asesmen' },
-                      { key: 'lampiran', label: 'Lampiran' },
-                    ].map((section) => (
-                      <label key={section.key} className="flex items-center gap-2 text-[10px] cursor-pointer hover:bg-white/5 p-1 rounded transition-colors">
+                    <div className="mb-2 pb-2 border-b border-white/10">
+                      <label className="flex items-center gap-2 text-[10px] cursor-pointer hover:bg-white/5 p-1 rounded transition-colors">
                         <input 
                           type="checkbox" 
-                          checked={pdfSections[section.key as keyof typeof pdfSections]}
-                          onChange={() => togglePdfSection(section.key as keyof typeof pdfSections)}
+                          checked={showPageNumbers}
+                          onChange={() => setShowPageNumbers(!showPageNumbers)}
                           className="w-3 h-3 rounded border-gray-400 text-teal-600 focus:ring-teal-500"
                         />
-                        <span className={pdfSections[section.key as keyof typeof pdfSections] ? 'text-white font-medium' : 'text-gray-500'}>
-                          {section.label}
+                        <span className={showPageNumbers ? 'text-white font-bold' : 'text-gray-500'}>
+                          Tambah Nomor Halaman
                         </span>
                       </label>
+                    </div>
+
+                    <p className="text-[9px] text-gray-500 uppercase tracking-widest px-1 mb-1">Urutan Bagian:</p>
+                    {pdfSections.map((section, idx) => (
+                      <div key={section.id} className="flex items-center justify-between gap-1 hover:bg-white/5 p-1 rounded transition-colors group">
+                        <label className="flex items-center gap-2 text-[10px] cursor-pointer flex-1">
+                          <input 
+                            type="checkbox" 
+                            checked={section.enabled}
+                            onChange={() => togglePdfSection(section.id)}
+                            className="w-3 h-3 rounded border-gray-400 text-teal-600 focus:ring-teal-500"
+                          />
+                          <span className={section.enabled ? 'text-white font-medium' : 'text-gray-500'}>
+                            {section.label}
+                          </span>
+                        </label>
+                        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            onClick={() => moveSection(idx, 'up')}
+                            disabled={idx === 0}
+                            className="p-0.5 hover:bg-white/10 rounded text-gray-400 disabled:opacity-20"
+                          >
+                            <ArrowLeft size={10} className="rotate-90" />
+                          </button>
+                          <button 
+                            onClick={() => moveSection(idx, 'down')}
+                            disabled={idx === pdfSections.length - 1}
+                            className="p-0.5 hover:bg-white/10 rounded text-gray-400 disabled:opacity-20"
+                          >
+                            <ArrowLeft size={10} className="-rotate-90" />
+                          </button>
+                        </div>
+                      </div>
                     ))}
                   </motion.div>
                 )}
@@ -641,7 +692,12 @@ export default function App() {
         {/* Hidden Preview for Step 1 & 2 printing - only show if NOT in Step 3 */}
         {step !== 3 && (
           <div className="hidden print:block">
-            <ModulePreview data={data} onEdit={handleEditSection} pdfSections={pdfSections} />
+            <ModulePreview 
+              data={data} 
+              onEdit={handleEditSection} 
+              pdfSections={pdfSections} 
+              showPageNumbers={showPageNumbers}
+            />
           </div>
         )}
 
@@ -675,7 +731,12 @@ export default function App() {
               <h2 className="text-xl font-bold text-teal-800">Pratinjau Hasil Akhir</h2>
               <p className="text-sm text-gray-500 italic">Silakan periksa kembali sebelum dicetak.</p>
             </div>
-            <ModulePreview data={data} onEdit={handleEditSection} pdfSections={pdfSections} />
+            <ModulePreview 
+              data={data} 
+              onEdit={handleEditSection} 
+              pdfSections={pdfSections} 
+              showPageNumbers={showPageNumbers}
+            />
             
             <div className="mt-8 flex justify-center pb-8 print:hidden">
               <button 

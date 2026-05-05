@@ -297,11 +297,35 @@
     page-break-before: always;
     break-before: page;
   }
+  
+  /* Page Numbering */
   body {
+    counter-reset: page;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     background: white !important;
     font-size: 10.5pt !important;
+  }
+  
+  .print-page-number {
+    display: none;
+  }
+
+  @media print {
+    .print-page-number {
+      display: block !important;
+      position: fixed;
+      bottom: 0.5cm;
+      right: 0.5cm;
+      font-size: 8pt;
+      color: #666 !important;
+      z-index: 9999;
+    }
+    
+    .print-page-number::after {
+      counter-increment: page;
+      content: "Halaman " counter(page);
+    }
   }
   /* Preserve colors for precision as requested by user */
   * {
