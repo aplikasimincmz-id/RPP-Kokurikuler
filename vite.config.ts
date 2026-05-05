@@ -23,7 +23,13 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       assetsDir: 'assets',
       emptyOutDir: true,
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 3000,
+      reportCompressedSize: false,
+    },
+    css: {
+      postcss: {
+        plugins: [],
+      },
     },
     server: {
       port: 3000,
