@@ -39,11 +39,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-primary-100 overflow-hidden relative z-10"
       >
-        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-center">
-            <p className="text-[10px] font-bold text-amber-700 uppercase tracking-widest flex items-center justify-center gap-2">
-                <ShieldAlert size={12} /> Aplikasi Ini Adalah Prototype / Demo - Bukan Situs Resmi Pemerintah
-            </p>
-        </div>
         <div className="bg-primary-800 p-8 text-center relative overflow-hidden">
           {/* Wave background */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -135,12 +130,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             Hint: Gunakan user <span className="font-bold text-gray-500">admin</span> dan pass <span className="font-bold text-gray-500">Admin24</span> untuk demo.
           </p>
 
-          <footer className="pt-4 text-center">
+          <footer className="pt-4 text-center border-t border-gray-100 mt-6 pt-6">
             <div className="flex items-center justify-center gap-2 text-primary-800 font-bold mb-1">
               <Heart className="fill-red-400 text-red-400" size={14} />
               <span className="text-sm">MI Berbasis Cinta</span>
             </div>
-            <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mt-6">
+            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2">
               © 2026 Agus Arifien
             </p>
           </footer>
