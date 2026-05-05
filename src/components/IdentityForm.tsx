@@ -1,6 +1,6 @@
 import React from 'react';
 import { ModuleData } from '../types';
-import { School, User, Calendar, Upload, ArrowRight, Save, CheckCircle2, Printer, RotateCcw } from 'lucide-react';
+import { School, User, Upload, ArrowRight, Save, CheckCircle2, Printer, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface IdentityFormProps {
@@ -58,7 +58,7 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({ data, onChange, onNe
           <p className="text-sm font-medium text-teal-700">Klik untuk unggah logo Madrasah</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <div className="space-y-1">
             <label className="text-xs font-bold text-gray-600 uppercase flex items-center gap-1">
               <School size={14} /> Nama Madrasah
@@ -66,35 +66,6 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({ data, onChange, onNe
             <input 
               name="nama_madrasah" value={data.nama_madrasah || ''} onChange={handleChange}
               placeholder="Contoh: MIN 1 Ciamis"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-600 uppercase flex items-center gap-1">
-              <Calendar size={14} /> Tahun Pelajaran
-            </label>
-            <input 
-              name="tahun_pelajaran" value={data.tahun_pelajaran || ''} onChange={handleChange}
-              placeholder="Contoh: 2024/2025"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-600 uppercase">Fase / Kelas</label>
-            <input 
-              name="fase_kelas" value={data.fase_kelas || ''} onChange={handleChange}
-              placeholder="Contoh: Fase A Kelas 1"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-600 uppercase">Semester</label>
-            <input 
-              name="semester" value={data.semester || ''} onChange={handleChange}
-              placeholder="Contoh: I (Ganjil)"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
             />
           </div>

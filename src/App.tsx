@@ -128,11 +128,22 @@ export default function App() {
               style.textContent = style.textContent.replace(/oklab\([^)]+\)/g, '#000');
             }
           }
+
+          // Forcefully remove elements marked as print-hidden to ensure they don't affect layout
+          const hiddenElements = clonedDoc.querySelectorAll('.print-hidden, .print\\:hidden');
+          hiddenElements.forEach(el => {
+            (el as HTMLElement).style.display = 'none';
+            // Optional: physically remove if style isn't enough, but display: none usually suffices for layout
+            el.remove();
+          });
+
           // Also hide any remaining interactive elements that shouldn't be in PDF
           const el = clonedDoc.getElementById('printable-module');
           if (el) {
             el.style.boxShadow = 'none';
             el.style.border = 'none';
+            el.style.margin = '0';
+            el.style.width = '100%';
           }
         },
         ignoreElements: (el) => {
