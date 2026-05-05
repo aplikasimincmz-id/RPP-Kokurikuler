@@ -126,10 +126,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             )}
           </button>
 
-          <p className="text-[10px] text-gray-400 text-center italic">
-            Hint: Gunakan user <span className="font-bold text-gray-500">admin</span> dan pass <span className="font-bold text-gray-500">Admin24</span> untuk demo.
-          </p>
-
           <footer className="pt-4 text-center border-t border-gray-100 mt-6 pt-6">
             <div className="flex items-center justify-center gap-2 text-primary-800 font-bold mb-1">
               <Heart className="fill-red-400 text-red-400" size={14} />

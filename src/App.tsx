@@ -70,6 +70,16 @@ export default function App() {
   const [showThemeSettings, setShowThemeSettings] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [isExporting, setIsExporting] = useState(false);
+  const [pdfSections, setPdfSections] = useState({
+    informasiUmum: true,
+    identifikasi: true,
+    desainPembelajaran: true,
+    deskripsiKegiatan: true,
+    langkahKegiatan: true,
+    asesmen: true,
+    lampiran: true
+  });
+  const [showPdfOptions, setShowPdfOptions] = useState(false);
   const [notification, setNotification] = useState<{ message: string; show: boolean }>({ message: '', show: false });
 
   const [data, setData] = useState<ModuleData>(() => {
@@ -155,6 +165,10 @@ export default function App() {
     } else {
       setStep(2);
     }
+  };
+
+  const togglePdfSection = (key: keyof typeof pdfSections) => {
+    setPdfSections(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const exportToPdf = async () => {
@@ -472,6 +486,52 @@ export default function App() {
               </button>
 
               <button 
+                onClick={() => setShowPdfOptions(!showPdfOptions)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                  showPdfOptions ? 'bg-amber-500/20 text-amber-300' : 'text-primary-200 hover:text-white hover:bg-white/5'
+                } border border-transparent hover:border-amber-500/30`}
+                title="Pilih Bagian PDF"
+              >
+                <div className="text-amber-400">
+                  <Layout size={18} />
+                </div>
+                Pilih Bagian PDF
+              </button>
+
+              <AnimatePresence>
+                {showPdfOptions && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex flex-col gap-1 pl-4 mb-2 overflow-hidden bg-black/20 rounded-xl p-3 border border-white/5"
+                  >
+                    {[
+                      { key: 'informasiUmum', label: 'Info Umum' },
+                      { key: 'identifikasi', label: 'Identifikasi' },
+                      { key: 'desainPembelajaran', label: 'Desain KBC' },
+                      { key: 'deskripsiKegiatan', label: 'Deskripsi AI' },
+                      { key: 'langkahKegiatan', label: 'Langkah JP' },
+                      { key: 'asesmen', label: 'Asesmen' },
+                      { key: 'lampiran', label: 'Lampiran' },
+                    ].map((section) => (
+                      <label key={section.key} className="flex items-center gap-2 text-[10px] cursor-pointer hover:bg-white/5 p-1 rounded transition-colors">
+                        <input 
+                          type="checkbox" 
+                          checked={pdfSections[section.key as keyof typeof pdfSections]}
+                          onChange={() => togglePdfSection(section.key as keyof typeof pdfSections)}
+                          className="w-3 h-3 rounded border-gray-400 text-teal-600 focus:ring-teal-500"
+                        />
+                        <span className={pdfSections[section.key as keyof typeof pdfSections] ? 'text-white font-medium' : 'text-gray-500'}>
+                          {section.label}
+                        </span>
+                      </label>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button 
                 onClick={exportToWord}
                 disabled={isExporting}
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/20 disabled:opacity-50"
@@ -580,7 +640,7 @@ export default function App() {
 
         {/* Hidden Preview for Step 1 & 2 printing */}
         <div className="hidden print:block">
-          <ModulePreview data={data} onEdit={handleEditSection} />
+          <ModulePreview data={data} onEdit={handleEditSection} pdfSections={pdfSections} />
         </div>
 
         {step === 2 && (
@@ -613,7 +673,7 @@ export default function App() {
               <h2 className="text-xl font-bold text-teal-800">Pratinjau Hasil Akhir</h2>
               <p className="text-sm text-gray-500 italic">Silakan periksa kembali sebelum dicetak.</p>
             </div>
-            <ModulePreview data={data} onEdit={handleEditSection} />
+            <ModulePreview data={data} onEdit={handleEditSection} pdfSections={pdfSections} />
             
             <div className="mt-8 flex justify-center pb-8 print:hidden">
               <button 
