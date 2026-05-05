@@ -111,13 +111,13 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
   const getSectionHeader = (index: number) => {
     const letter = String.fromCharCode(65 + index);
     return (
-      <h2 className="bg-primary-700 text-white px-2 py-1 font-bold text-base mb-2 flex justify-between items-center group transition-colors">
+      <h2 className="bg-teal-600 print:bg-teal-700 text-white px-3 py-2 font-bold text-base mb-4 flex justify-between items-center group transition-colors rounded">
         <span>{letter}. {sections[index]}</span>
         <button 
           onClick={() => onEdit(index)}
           className="bg-white/20 hover:bg-white/40 text-[10px] px-2 py-0.5 rounded transition-colors flex items-center gap-1 print:hidden opacity-0 group-hover:opacity-100"
         >
-          <span className="font-normal text-[8px] uppercase tracking-wider">Perbaiki</span>
+          <span className="font-normal text-[8px] uppercase tracking-wider text-white">Edit</span>
         </button>
       </h2>
     );
@@ -127,40 +127,31 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
     switch(id) {
       case 'informasiUmum':
         return (
-          <section key={id} id="section-0" className="mb-6">
+          <section key={id} id="section-0" className="mb-8">
             {getSectionHeader(0)}
-            <table className="w-full border-none text-sm">
-              <tbody>
-                <tr>
-                  <td className="w-40 font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Nama Madrasah</td>
-                  <td className="py-1">:<span className="ml-2 dark:text-neutral-300">{data.nama_madrasah}</span></td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Fase/ Kelas</td>
-                  <td className="py-1">:<span className="ml-2 dark:text-neutral-300">{data.fase_kelas}</span></td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Semester</td>
-                  <td className="py-1">:<span className="ml-2 dark:text-neutral-300">{data.semester}</span></td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Tahun Pelajaran</td>
-                  <td className="py-1">:<span className="ml-2 dark:text-neutral-300">{data.tahun_pelajaran}</span></td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Tema Kegiatan</td>
-                  <td className="py-1">:<span className="ml-2 font-bold text-primary-800 dark:text-primary-300 transition-colors">{data.nama_kegiatan}</span></td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Jenis Kokurikuler</td>
-                  <td className="py-1">:<span className="ml-2 dark:text-neutral-300">{data.jenis_kokurikuler}</span></td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-primary-900 dark:text-primary-400 py-1 transition-colors">Alokasi Waktu</td>
-                  <td className="py-1">:<span className="ml-2 dark:text-neutral-300">{data.alokasi_jp} JP</span></td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="pl-4">
+              <table className="w-full border-none text-sm border-separate border-spacing-y-1">
+                <tbody>
+                  {[
+                    { label: "Nama Madrasah", value: data.nama_madrasah },
+                    { label: "Fase/ Kelas", value: data.fase_kelas },
+                    { label: "Semester", value: data.semester },
+                    { label: "Tahun Pelajaran", value: data.tahun_pelajaran },
+                    { label: "Tema Kegiatan", value: data.nama_kegiatan, bold: true },
+                    { label: "Jenis Kokurikuler", value: data.jenis_kokurikuler },
+                    { label: "Alokasi Waktu", value: `${data.alokasi_jp} JP` },
+                  ].map((row, i) => (
+                    <tr key={i}>
+                      <td className="w-48 font-semibold text-gray-800 dark:text-gray-200 py-0.5">{row.label}</td>
+                      <td className="w-4 py-0.5 text-center">:</td>
+                      <td className={`py-0.5 ${row.bold ? 'font-bold text-teal-800 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                        {row.value || "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         );
       case 'identifikasi':
@@ -387,31 +378,31 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
             </h2>
 
             {/* Formative Table: Tabel Observasi/Catatan Anekdotal */}
-            <div className="mb-10">
+            <div className="mb-10 break-inside-avoid">
               <div className="flex justify-between items-end mb-3 border-b-2 border-black pb-1 transition-colors">
-                <h3 className="text-base font-bold text-black uppercase">Lampiran 1: Contoh Instrumen Formatif (Catatan Anekdotal)</h3>
-                <p className="text-[10px] italic text-gray-600 tracking-tighter">Instrumen Pendamping Gurru</p>
+                <h3 className="text-base font-bold text-black uppercase">Lampiran 1: Instrumen Penilaian Formatif</h3>
+                <p className="text-[10px] italic text-gray-600 tracking-tighter">Lembar Observasi Guru (Catatan Anekdotal)</p>
               </div>
-              <table className="w-full border-collapse border-2 border-black text-[11px] lampiran-table">
+              <table className="w-full border-collapse border-2 border-black text-[10px] lampiran-table shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] print:shadow-none">
                 <thead>
-                  <tr className="bg-primary-800 text-white uppercase text-[10px] text-center">
-                    <th className="border-2 border-black p-2 w-10">No</th>
-                    <th className="border-2 border-black p-2 w-32">Hari/Tanggal</th>
-                    <th className="border-2 border-black p-2 w-40">Nama Murid</th>
-                    <th className="border-2 border-black p-2 w-36">Aspek Diamati</th>
-                    <th className="border-2 border-black p-2">Catatan Kejadian / Perilaku</th>
-                    <th className="border-2 border-black p-2 w-40">Tindak Lanjut Guru</th>
+                  <tr className="bg-gray-100 uppercase text-[9px] text-center font-bold">
+                    <th className="w-8">No</th>
+                    <th className="w-28">Hari/Tanggal</th>
+                    <th className="w-36">Nama Murid</th>
+                    <th className="w-32">Aspek Diamati</th>
+                    <th>Catatan Kejadian / Perilaku</th>
+                    <th className="w-32">Tindak Lanjut</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[1, 2, 3, 4, 5].map(i => (
-                    <tr key={i} className="h-12">
-                      <td className="border border-black p-2 text-center font-mono">{i}</td>
-                      <td className="border border-black p-2"></td>
-                      <td className="border border-black p-2"></td>
-                      <td className="border border-black p-2"></td>
-                      <td className="border border-black p-2 text-gray-400 italic text-[10px]">... deskripsi perilaku murid ...</td>
-                      <td className="border border-black p-2"></td>
+                  {[1, 2, 3, 4, 5, 6].map(i => (
+                    <tr key={i} className="h-10">
+                      <td className="text-center font-mono">{i}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className="text-gray-300 italic text-[9px]">...........................................................................</td>
+                      <td></td>
                     </tr>
                   ))}
                 </tbody>
@@ -419,20 +410,20 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
             </div>
 
             {/* Summative Table: Rubrik Penilaian Kinerja */}
-            <div className="page-break-before">
+            <div className="break-inside-avoid mb-10">
               <div className="flex justify-between items-end mb-3 border-b-2 border-black pb-1 transition-colors">
-                <h3 className="text-base font-bold text-black uppercase">Lampiran 2: Instrumen Penilaian Sumatif (Rubrik Penilaian Kinerja)</h3>
-                <p className="text-[10px] italic text-gray-600">Objek: Proyek "{data.nama_kegiatan}"</p>
+                <h3 className="text-base font-bold text-black uppercase">Lampiran 2: Instrumen Penilaian Sumatif</h3>
+                <p className="text-[10px] italic text-gray-600">Rubrik Proyek: {data.nama_kegiatan}</p>
               </div>
-              <table className="w-full border-collapse border-2 border-black text-[10px] lampiran-table">
+              <table className="w-full border-collapse border-2 border-black text-[10px] lampiran-table shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] print:shadow-none">
                 <thead>
-                  <tr className="bg-primary-800 text-white uppercase font-bold text-center">
-                    <th className="border-2 border-black p-2 w-28">Indikator (DPL/KBC)</th>
-                    <th className="border-2 border-black p-2 w-32">Bukti Pencapaian</th>
-                    <th className="border-2 border-black p-2">Mulai Berkembang (1)</th>
-                    <th className="border-2 border-black p-2">Sedang Berkembang (2)</th>
-                    <th className="border-2 border-black p-2">Berkembang Sesuai Harapan (3)</th>
-                    <th className="border-2 border-black p-2">Sangat Berkembang (4)</th>
+                  <tr className="bg-gray-100 uppercase font-bold text-center text-[9px]">
+                    <th className="w-32">Indikator</th>
+                    <th className="w-36">Bukti Pencapaian</th>
+                    <th className="w-16">MB (1)</th>
+                    <th className="w-16">SB (2)</th>
+                    <th className="w-16">BSH (3)</th>
+                    <th className="w-16">SAB (4)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -536,26 +527,26 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
       }
 
       {/* Signatures and Footer */}
-      <div className="mt-12 text-sm break-inside-avoid">
+      <div className="mt-16 text-sm break-inside-avoid print:mt-12">
         <table className="w-full border-none">
           <tbody>
             <tr>
-              <td colSpan={2} className="text-right py-4 dark:text-neutral-400">
+              <td colSpan={2} className="text-right py-4 dark:text-neutral-400 pr-4">
                 {data.titimangsa || "...................., ...................."}
               </td>
             </tr>
             <tr className="text-center">
-              <td className="w-1/2 py-2 dark:text-neutral-300">
+              <td className="w-1/2 py-2 px-8 dark:text-neutral-300">
                 <p>Mengetahui,</p>
-                <p className="mb-20 pb-16">Kepala Madrasah,</p>
+                <p className="mb-24">Kepala Madrasah,</p>
                 <p className="font-bold underline uppercase dark:text-white">{data.nama_kepala || "........................................."}</p>
-                <p>NIP. {data.nip_kepala || "........................................."}</p>
+                <p className="text-xs">NIP. {data.nip_kepala || "........................................."}</p>
               </td>
-              <td className="w-1/2 py-2 dark:text-neutral-300">
+              <td className="w-1/2 py-2 px-8 dark:text-neutral-300">
                 <p className="invisible">Guru,</p>
-                <p className="mb-20 pb-16">Guru/ Fasilitator,</p>
+                <p className="mb-24">Guru/ Fasilitator,</p>
                 <p className="font-bold underline uppercase dark:text-white">{data.nama_guru || "........................................."}</p>
-                <p>NIP. {data.nip_guru || "........................................."}</p>
+                <p className="text-xs">NIP. {data.nip_guru || "........................................."}</p>
               </td>
             </tr>
           </tbody>
