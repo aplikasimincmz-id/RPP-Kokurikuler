@@ -47,35 +47,23 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             </svg>
           </div>
 
-          <motion.div
+          <motion.img 
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mx-auto mb-6 flex items-center justify-center relative z-10 border border-white/30"
-          >
-            <Heart className="text-white fill-white" size={40} />
-          </motion.div>
+            src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Kementerian_Agama_new_logo.png" 
+            alt="Logo Kemenag" 
+            className="w-24 h-24 mx-auto mb-6 drop-shadow-lg relative z-10"
+          />
           <h1 className="text-2xl font-extrabold text-white leading-tight relative z-10 mb-2">
             Selamat datang di Aplikasi Generate RPP Kokurikuler
           </h1>
-          <p className="text-primary-100 text-[10px] italic opacity-80 relative z-10 uppercase tracking-widest mt-1">
+          <p className="text-primary-100 text-sm italic opacity-80 relative z-10">
             "Membangun Generasi Beradab & Cinta Ilahi"
           </p>
-          <div className="mt-4 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 inline-block border border-white/20 relative z-10">
-            <p className="text-[9px] font-bold text-white uppercase tracking-wider">
-              Educational Prototype Tool
-            </p>
-          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
-          <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl mb-2">
-            <p className="text-[10px] text-amber-800 leading-tight text-center font-medium">
-              Aplikasi ini adalah Prototype / Alat Bantu Guru Mandiri.<br />
-              Bukan situs resmi pemerintah.
-            </p>
-          </div>
-
           {error && (
             <motion.div 
               initial={{ opacity: 0, x: -10 }}
@@ -146,19 +134,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2">
               © 2026 Agus Arifien
             </p>
-            <div className="mt-4 flex flex-col gap-2">
-              <p className="text-[8px] text-gray-400 italic">
-                Jangan memasukkan data sensitif seperti password email atau data perbankan anda.
-              </p>
-              <a 
-                href="https://safebrowsing.google.com/safebrowsing/report_error/?hl=id" 
-                target="_blank" 
-                rel="no-referrer"
-                className="text-[9px] text-blue-500 hover:underline"
-              >
-                Laporkan kesalahan (Bukan situs phishing)
-              </a>
-            </div>
           </footer>
         </form>
       </motion.div>
