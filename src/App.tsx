@@ -144,6 +144,11 @@ export default function App() {
     window.print();
   };
 
+  const handleSave = () => {
+    localStorage.setItem('kbc_module_data', JSON.stringify(data));
+    showToast("Modul berhasil disimpan ke perangkat Anda!");
+  };
+
   const handleEditSection = (sectionIndex: number) => {
     if (sectionIndex === 0) {
       setStep(1);
@@ -382,117 +387,176 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-4 md:p-8 transition-colors duration-300">
-      {/* Brand Header */}
-      <div className="max-w-7xl mx-auto mb-4 flex justify-between items-center px-4 print:hidden">
-        <p className="text-[10px] font-bold text-primary-800 dark:text-primary-400 uppercase tracking-widest opacity-60">
-          © 2026 Agus Arifien
-        </p>
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => setShowThemeSettings(!showThemeSettings)}
-            className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 transition-colors ${showThemeSettings ? 'text-primary-600' : 'text-gray-500 hover:text-primary-600'}`}
-          >
-            <Palette size={12} /> Tema
-          </button>
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {showThemeSettings && (
-          <div className="fixed top-16 right-8 z-[60] animate-in fade-in slide-in-from-top-2 duration-200">
-            <ThemeSettingsComponent 
-              settings={themeSettings} 
-              onChange={setThemeSettings} 
-            />
-            <button 
-              onClick={() => setShowThemeSettings(false)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-white"
-            >
-              <X size={14} />
-            </button>
-          </div>
-        )}
-      </AnimatePresence>
-
-      <header className="max-w-7xl mx-auto mb-6 bg-primary-800 dark:bg-primary-900 text-white px-6 py-4 rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 print:hidden transition-colors duration-300">
-        <div>
-          <h1 className="text-xl md:text-2xl font-extrabold flex items-center gap-2 text-white">
+    <div className="flex flex-col md:flex-row min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
+      {/* Sidebar - Left Menu */}
+      <aside className="w-full md:w-72 bg-primary-800 dark:bg-primary-950 text-white p-6 flex flex-col sticky top-0 h-auto md:h-screen z-40 print:hidden transition-colors duration-300 shadow-xl overflow-y-auto">
+        <div className="mb-8">
+          <h1 className="text-xl font-extrabold flex items-center gap-2 text-white">
             <Heart className="fill-red-400 text-red-400 animate-pulse" size={24} /> 
-            Aplikasi RPP Kokurikuler
+            <span>RPP Kokurikuler</span>
           </h1>
-          <p className="text-primary-100 mt-0.5 text-xs opacity-90 italic">"Ilmu Tanpa Adab Bak Pohon Tak Berbuah"</p>
+          <p className="text-primary-100 mt-2 text-[10px] opacity-80 italic leading-tight">
+            "Ilmu Tanpa Adab Bak Pohon Tak Berbuah"
+          </p>
         </div>
-        <div className="flex-1 flex justify-center py-2 md:py-0">
-          <nav className="flex items-center bg-primary-900/40 p-1 rounded-full border border-primary-700/50">
-            {[
-              { id: 1, label: 'Identitas', icon: <FileText size={14} /> },
-              { id: 2, label: 'Isi Modul', icon: <Layout size={14} /> },
-              { id: 3, label: 'Pratinjau', icon: <Printer size={14} /> },
-            ].map((navStep) => (
-              <button
-                key={navStep.id}
-                onClick={() => setStep(navStep.id as 1 | 2 | 3)}
-                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold transition-all whitespace-nowrap ${
-                  step === navStep.id 
-                    ? 'bg-primary-500 text-white shadow-sm shadow-primary-900' 
-                    : 'text-primary-200 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                {navStep.icon}
-                <span className="hidden sm:inline">{navStep.label}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
-        <div className="flex items-center gap-2">
-          {step > 1 && (
-            <button 
-              onClick={() => setStep((prev) => (prev - 1) as 1 | 2)}
-              className="bg-white/10 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 hover:bg-white/20 transition-all active:scale-95 border border-white/20"
+
+        <nav className="flex flex-col gap-2 mb-8">
+          <p className="text-[10px] font-bold text-primary-300 uppercase tracking-widest mb-2 opacity-60">Menu Utama</p>
+          {[
+            { id: 1, label: 'Identitas Proyek', icon: <FileText size={18} /> },
+            { id: 2, label: 'Isi Modul KBC', icon: <Layout size={18} /> },
+            { id: 3, label: 'Pratinjau & Cetak', icon: <Printer size={18} /> },
+          ].map((navStep) => (
+            <button
+              key={navStep.id}
+              onClick={() => setStep(navStep.id as 1 | 2 | 3)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                step === navStep.id 
+                  ? 'bg-primary-500 text-white shadow-md shadow-primary-900 border border-primary-400/30' 
+                  : 'text-primary-200 hover:text-white hover:bg-white/5'
+              }`}
             >
-              <ArrowLeft size={14} /> Kembali
+              <div className={step === navStep.id ? 'text-white' : 'text-primary-400'}>
+                {navStep.icon}
+              </div>
+              {navStep.label}
             </button>
-          )}
+          ))}
+        </nav>
+
+        <div className="flex flex-col gap-2 mb-8">
+          <p className="text-[10px] font-bold text-primary-300 uppercase tracking-widest mb-2 opacity-60">Aksi Cepat</p>
+          
           <button 
-            onClick={handleLogout}
-            className="bg-red-500/20 hover:bg-red-500/40 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 border border-red-400/30"
-            title="Keluar dari Aplikasi"
+            onClick={handleSave}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-teal-500/20 border border-transparent hover:border-teal-500/30"
+            title="Simpan Modul (Local Storage)"
           >
-            <LogOut size={14} /> <span className="hidden sm:inline">Keluar</span>
+            <div className="text-teal-400">
+              <Save size={18} />
+            </div>
+            Simpan Modul
           </button>
+
           <button 
             onClick={handlePrint}
-            className="bg-primary-700/50 hover:bg-primary-700 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 border border-primary-600/30"
-            title="Cetak Halaman Ini"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-blue-500/20 border border-transparent hover:border-blue-500/30"
+            title="Cetak Halaman (Print)"
           >
-            <Printer size={14} /> <span className="hidden sm:inline">Cetak Halaman</span>
+            <div className="text-blue-400">
+              <Printer size={18} />
+            </div>
+            Cetak Langsung
           </button>
+
           {step === 3 && (
-            <div className="flex gap-2 bg-primary-900/40 p-1 rounded-full border border-primary-700/50">
+            <>
               <button 
                 onClick={exportToPdf}
                 disabled={isExporting}
-                className={`bg-white text-primary-900 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95 ${isExporting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-50 hover:shadow-md'}`}
-                title="Simpan Modul sebagai PDF"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/20 disabled:opacity-50"
+                title="Cetak Modul ke PDF"
               >
-                {isExporting ? <Loader2 className="animate-spin" size={14} /> : <Printer size={14} />} 
-                {isExporting ? 'Memproses...' : 'Simpan PDF'}
+                <div className="text-white">
+                  {isExporting ? <Loader2 className="animate-spin" size={18} /> : <Printer size={18} />}
+                </div>
+                {isExporting ? 'Memproses PDF...' : 'Simpan PDF'}
               </button>
+
               <button 
                 onClick={exportToWord}
                 disabled={isExporting}
-                className={`bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 ${isExporting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-500 shadow-sm'}`}
-                title="Ekspor Ke MS Word"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/20 disabled:opacity-50"
+                title="Ekspor Modul ke Word"
               >
-                <FileText size={14} /> Word
+                <div className="text-blue-200">
+                  <FileText size={18} />
+                </div>
+                Ekspor Word
+              </button>
+            </>
+          )}
+
+          <div className="h-[1px] bg-primary-700/50 my-2"></div>
+
+          <button 
+            onClick={() => setShowThemeSettings(!showThemeSettings)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+              showThemeSettings ? 'bg-white/10 text-white' : 'text-primary-200 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <div className="text-amber-400">
+              <Palette size={18} />
+            </div>
+            Sesuaikan Tema
+          </button>
+        </div>
+
+        <div className="mt-auto pt-6 flex flex-col gap-4">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-red-300 hover:text-white hover:bg-red-500/20 border border-transparent hover:border-red-500/30"
+          >
+            <div className="text-red-400">
+              <LogOut size={18} />
+            </div>
+            Keluar Aplikasi
+          </button>
+
+          <div className="px-4">
+            <p className="text-[9px] font-bold text-primary-400 uppercase tracking-widest opacity-60">
+              © 2026 Agus Arifien
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-y-auto">
+        <header className="px-6 py-4 flex justify-between items-center bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 print:hidden transition-colors">
+          <div className="flex items-center gap-3">
+            {step > 1 && (
+              <button 
+                onClick={() => setStep((prev) => (prev - 1) as 1 | 2)}
+                className="p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all"
+                title="Kembali"
+              >
+                <ArrowLeft size={18} />
+              </button>
+            )}
+            <h2 className="text-sm font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+              {step === 1 ? 'Identitas Proyek' : step === 2 ? 'Pengisian Modul' : 'Hasil Akhir Modul'}
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-gray-400 mr-2 uppercase tracking-tight">Step {step} of 3</span>
+            <div className="flex gap-1">
+              {[1, 2, 3].map((s) => (
+                <div key={s} className={`w-6 h-1 rounded-full transition-all duration-300 ${s <= step ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-800'}`} />
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <AnimatePresence>
+          {showThemeSettings && (
+            <div className="fixed top-20 left-72 z-50 animate-in fade-in slide-in-from-left-2 duration-200 ml-4 print:hidden">
+              <ThemeSettingsComponent 
+                settings={themeSettings} 
+                onChange={setThemeSettings} 
+              />
+              <button 
+                onClick={() => setShowThemeSettings(false)}
+                className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-white"
+              >
+                <X size={14} />
               </button>
             </div>
           )}
-        </div>
-      </header>
+        </AnimatePresence>
 
-      <main className="max-w-7xl mx-auto">
+        <main className="p-4 md:p-8 max-w-5xl mx-auto w-full">
         {step === 1 && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <IdentityForm 
@@ -556,9 +620,10 @@ export default function App() {
         )}
       </main>
 
-      <footer className="mt-20 text-center text-gray-400 text-xs pb-10 print:hidden">
+      <footer className="mt-auto px-6 py-4 text-center text-gray-400 text-[10px] print:hidden bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 transition-colors">
         &copy; 2026 Ahli Kurikulum Madrasah & KBC. Dirancang eksklusif untuk Guru MI.
       </footer>
+    </div>
 
       {/* Notification Toast */}
       <AnimatePresence>
