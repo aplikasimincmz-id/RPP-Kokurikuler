@@ -638,10 +638,12 @@ export default function App() {
           </div>
         )}
 
-        {/* Hidden Preview for Step 1 & 2 printing */}
-        <div className="hidden print:block">
-          <ModulePreview data={data} onEdit={handleEditSection} pdfSections={pdfSections} />
-        </div>
+        {/* Hidden Preview for Step 1 & 2 printing - only show if NOT in Step 3 */}
+        {step !== 3 && (
+          <div className="hidden print:block">
+            <ModulePreview data={data} onEdit={handleEditSection} pdfSections={pdfSections} />
+          </div>
+        )}
 
         {step === 2 && (
           <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
@@ -713,10 +715,30 @@ export default function App() {
       {/* Tailwind Print Overrides */}
       <style>{`
         @media print {
-          body { background: white; margin: 0; padding: 0; }
-          header, footer, .print-hidden { display: none !important; }
-          .max-w-7xl { max-width: 100% !important; margin: 0 !important; }
-          #root > div { padding: 0 !important; }
+          body { background: white !important; margin: 0; padding: 0; }
+          header, footer, aside, .print-hidden, .print\\:hidden, button, nav { 
+            display: none !important; 
+          }
+          main { 
+            padding: 0 !important; 
+            margin: 0 !important; 
+            max-width: 100% !important; 
+            width: 100% !important;
+          }
+          #root { 
+            padding: 0 !important; 
+            margin: 0 !important;
+          }
+          #root > div {
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .max-w-5xl { 
+            max-width: 100% !important; 
+            margin: 0 !important; 
+            width: 100% !important;
+          }
           #printable-module { 
             box-shadow: none !important; 
             border: none !important; 
@@ -724,6 +746,15 @@ export default function App() {
             padding: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
+          }
+          /* Improve text wrap and avoiding breaks in tables */
+          table, tr, td, th {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          .page-break-before {
+            page-break-before: always !important;
+            break-before: page !important;
           }
         }
       `}</style>

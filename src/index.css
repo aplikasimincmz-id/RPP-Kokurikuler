@@ -288,7 +288,7 @@
 @media print {
   @page {
     size: A4;
-    margin: 1.5cm;
+    margin: 1cm;
   }
   .print-hidden, .print\:hidden {
     display: none !important;
@@ -301,71 +301,90 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     background: white !important;
-    color: black !important;
-    font-size: 11pt !important;
+    font-size: 10.5pt !important;
   }
-  /* Force black text for all elements */
+  /* Preserve colors for precision as requested by user */
   * {
-    color: black !important;
-    text-shadow: none !important;
-    box-shadow: none !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
   }
-  /* Force backgrounds to be light */
-  .bg-primary-700, .bg-primary-800, .bg-primary-900, .bg-teal-800, .bg-teal-900 {
-    background-color: #f0f0f0 !important;
+  
+  /* Ensure dark mode colors don't leak into print */
+  .dark * {
+    color: inherit !important;
+    background-color: transparent !important;
+  }
+  .dark body {
+    background-color: white !important;
     color: black !important;
-    border: 1px solid black !important;
   }
-  .bg-primary-50, .bg-teal-50, .bg-gray-50 {
-    background-color: #fafafa !important;
-    border: 0.5px solid #ccc !important;
+  
+  /* Layout adjustments */
+  #printable-module {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: black !important;
   }
-  /* Borders */
-  .border, .border-collapse, td, th {
-    border: 1px solid black !important;
-  }
-  .border-2 {
-    border: 2px solid black !important;
-  }
-  .border-double {
-    border-top: 3px double black !important;
-    border-bottom: 3px double black !important;
-    border-left: none !important;
-    border-right: none !important;
-  }
+
   table {
     border-collapse: collapse !important;
     width: 100% !important;
-    margin-bottom: 15px !important;
+    margin-bottom: 12px !important;
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
   td, th {
-    padding: 6px 10px !important;
+    padding: 4px 8px !important;
     vertical-align: top !important;
+    border: 1px solid #ddd !important;
   }
-  .shadow-sm, .shadow-md, .shadow-lg {
-    box-shadow: none !important;
+  
+  /* Force tables with .border-none to actually have no borders */
+  table.border-none, table.border-none td, table.border-none tr {
     border: none !important;
   }
-  /* Specific component adjustments */
-  .lampiran-table th {
-    background-color: #e5e5e5 !important;
-    font-weight: bold !important;
+
+  /* Specific header styling to match preview */
+  h2 {
+    background-color: #0f766e !important; /* teal-700 */
+    color: white !important;
+    padding: 4px 8px !important;
+    -webkit-print-color-adjust: exact !important;
   }
+  
+  .bg-primary-900 {
+    background-color: #134e4a !important;
+    color: white !important;
+  }
+
+  /* Ensure text is dark and readable */
+  .text-gray-700, .text-gray-800, .text-gray-900, p, span, li, td {
+    color: #1a1a1a !important;
+  }
+
   img {
-    filter: grayscale(1) !important;
     max-height: 80px !important;
+    display: block;
+    margin: 0 auto;
   }
-  /* Markdown styling in print */
-  .markdown-content p {
-    text-align: justify !important;
-    margin-bottom: 10px !important;
-    line-height: 1.4 !important;
+  
+  /* Appendix table specific */
+  .lampiran-table th {
+    background-color: #134e4a !important;
+    color: white !important;
+    border: 1px solid black !important;
   }
-  .markdown-content ul, .markdown-content ol {
-    padding-left: 25px !important;
-    margin-bottom: 10px !important;
+  .lampiran-table td {
+    border: 1px solid black !important;
   }
 }
 
