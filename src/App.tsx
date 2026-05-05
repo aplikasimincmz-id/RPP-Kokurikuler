@@ -7,66 +7,70 @@ import { useState, useEffect } from 'react';
 import { ModuleForm } from './components/ModuleForm';
 import { ModulePreview } from './components/ModulePreview';
 import { IdentityForm } from './components/IdentityForm';
-import { ModuleData } from './types';
-import { Printer, Heart, Save, ArrowLeft, Layout, FileText, Download, Loader2, CheckCircle } from 'lucide-react';
+import { LoginPage } from './components/LoginPage';
+import { ThemeSettingsComponent } from './components/ThemeSettings';
+import { ModuleData, ThemeSettings } from './types';
+import { Printer, Heart, Save, ArrowLeft, Layout, FileText, Download, Loader2, CheckCircle, LogOut, Palette, X } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { motion, AnimatePresence } from 'motion/react';
 
+const getDefaultData = (): ModuleData => {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const academicYear = currentMonth >= 6 
+    ? `${currentYear}/${currentYear + 1}` 
+    : `${currentYear - 1}/${currentYear}`;
+
+  return {
+    nama_madrasah: '',
+    nama_kepala: '',
+    nip_kepala: '',
+    nama_guru: '',
+    nip_guru: '',
+    tahun_pelajaran: academicYear,
+    logo_url: '',
+    titimangsa: `Ciamis, ${now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`,
+    fase_kelas: 'Fase A Kelas 1',
+    semester: 'I (Ganjil)',
+    alokasi_jp: '54',
+    nama_kegiatan: 'Aku Sayang Bumi',
+    jenis_kokurikuler: 'Kolaboratif Berbasis Cinta (KKBC)',
+    karakteristik: 'Murid memiliki rasa ingin tahu yang tinggi terhadap benda di sekitarnya, senang bergerak, dan baru memulai pembiasaan adab madrasah.',
+    dimensi: 'Beriman, Bertakwa Kepada Tuhan YME, dan Berakhlak Mulia',
+    topik: 'Cinta Alam dan Lingkungan',
+    tujuan: 'Menumbuhkan rasa syukur kepada Allah SWT melalui kegiatan merawat tanaman dan menjaga kebersihan lingkungan madrasah.',
+    harian: 'Penyiraman tanaman pot and dzikir lingkungan',
+    mingguan: 'Operasi Semut (Kebersihan Bersama)',
+    bulanan: 'Festival Panen atau Gelar Karya Mini',
+    tahunan: 'Aksi Nyata Penghijauan Lingkungan Sekitar MI',
+    praktik_pedagogis: 'PjBL',
+    deskripsi_kegiatan_ai: '',
+    langkah_tahap_1: '',
+    langkah_tahap_2: '',
+    langkah_tahap_3: '',
+  };
+};
+
 export default function App() {
+  // 1. ALL HOOKS MUST COEXIST AT THE TOP
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('kbc_logged_in') === 'true';
+  });
+  const [themeSettings, setThemeSettings] = useState<ThemeSettings>(() => {
+    const saved = localStorage.getItem('kbc_theme_settings');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    return { mode: 'system', primaryColor: 'teal' };
+  });
+  const [showThemeSettings, setShowThemeSettings] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [isExporting, setIsExporting] = useState(false);
   const [notification, setNotification] = useState<{ message: string; show: boolean }>({ message: '', show: false });
-
-  useEffect(() => {
-    if (notification.show) {
-      const timer = setTimeout(() => {
-        setNotification(prev => ({ ...prev, show: false }));
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification.show]);
-
-  const showToast = (message: string) => {
-    setNotification({ message, show: true });
-  };
-  const getDefaultData = (): ModuleData => {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    const academicYear = currentMonth >= 6 
-      ? `${currentYear}/${currentYear + 1}` 
-      : `${currentYear - 1}/${currentYear}`;
-
-    return {
-      nama_madrasah: '',
-      nama_kepala: '',
-      nip_kepala: '',
-      nama_guru: '',
-      nip_guru: '',
-      tahun_pelajaran: academicYear,
-      logo_url: '',
-      titimangsa: `Ciamis, ${now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`,
-      fase_kelas: 'Fase A Kelas 1',
-      semester: 'I (Ganjil)',
-      alokasi_jp: '54',
-      nama_kegiatan: 'Aku Sayang Bumi',
-      jenis_kokurikuler: 'Kolaboratif Berbasis Cinta (KKBC)',
-      karakteristik: 'Murid memiliki rasa ingin tahu yang tinggi terhadap benda di sekitarnya, senang bergerak, dan baru memulai pembiasaan adab madrasah.',
-      dimensi: 'Beriman, Bertakwa Kepada Tuhan YME, dan Berakhlak Mulia',
-      topik: 'Cinta Alam dan Lingkungan',
-      tujuan: 'Menumbuhkan rasa syukur kepada Allah SWT melalui kegiatan merawat tanaman dan menjaga kebersihan lingkungan madrasah.',
-      harian: 'Penyiraman tanaman pot dan dzikir lingkungan',
-      mingguan: 'Operasi Semut (Kebersihan Bersama)',
-      bulanan: 'Festival Panen atau Gelar Karya Mini',
-      tahunan: 'Aksi Nyata Penghijauan Lingkungan Sekitar MI',
-      praktik_pedagogis: 'PjBL',
-      deskripsi_kegiatan_ai: '',
-      langkah_tahap_1: '',
-      langkah_tahap_2: '',
-      langkah_tahap_3: '',
-    };
-  };
 
   const [data, setData] = useState<ModuleData>(() => {
     const saved = localStorage.getItem('kbc_module_data');
@@ -79,6 +83,48 @@ export default function App() {
     }
     return getDefaultData();
   });
+
+  useEffect(() => {
+    if (notification.show) {
+      const timer = setTimeout(() => {
+        setNotification(prev => ({ ...prev, show: false }));
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification.show]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (themeSettings.mode === 'dark') {
+      root.classList.add('dark');
+    } else if (themeSettings.mode === 'light') {
+      root.classList.remove('dark');
+    } else {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.classList.toggle('dark', isDark);
+    }
+    localStorage.setItem('kbc_theme_settings', JSON.stringify(themeSettings));
+  }, [themeSettings]);
+
+  // 2. Early return AFTER hooks
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    localStorage.setItem('kbc_logged_in', 'true');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('kbc_logged_in');
+    setIsLoggedIn(false);
+    window.location.reload();
+  };
+
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
+  const showToast = (message: string) => {
+    setNotification({ message, show: true });
+  };
 
   const handleReset = () => {
     if (window.confirm('Apakah Anda yakin ingin menghapus semua data dan kembali ke awal? Tindakan ini tidak bisa dibatalkan.')) {
@@ -336,17 +382,49 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 p-4 md:p-8">
-      <header className="max-w-7xl mx-auto mb-6 bg-teal-800 text-white px-6 py-4 rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 print:hidden">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-4 md:p-8 transition-colors duration-300">
+      {/* Brand Header */}
+      <div className="max-w-7xl mx-auto mb-4 flex justify-between items-center px-4 print:hidden">
+        <p className="text-[10px] font-bold text-primary-800 dark:text-primary-400 uppercase tracking-widest opacity-60">
+          © 2026 Agus Arifien
+        </p>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => setShowThemeSettings(!showThemeSettings)}
+            className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 transition-colors ${showThemeSettings ? 'text-primary-600' : 'text-gray-500 hover:text-primary-600'}`}
+          >
+            <Palette size={12} /> Tema
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {showThemeSettings && (
+          <div className="fixed top-16 right-8 z-[60] animate-in fade-in slide-in-from-top-2 duration-200">
+            <ThemeSettingsComponent 
+              settings={themeSettings} 
+              onChange={setThemeSettings} 
+            />
+            <button 
+              onClick={() => setShowThemeSettings(false)}
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-white"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <header className="max-w-7xl mx-auto mb-6 bg-primary-800 dark:bg-primary-900 text-white px-6 py-4 rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 print:hidden transition-colors duration-300">
         <div>
-          <h1 className="text-xl md:text-2xl font-extrabold flex items-center gap-2">
+          <h1 className="text-xl md:text-2xl font-extrabold flex items-center gap-2 text-white">
             <Heart className="fill-red-400 text-red-400 animate-pulse" size={24} /> 
             Aplikasi RPP Kokurikuler
           </h1>
-          <p className="text-teal-100 mt-0.5 text-xs opacity-90 italic">"Ilmu Tanpa Adab Bak Pohon Tak Berbuah"</p>
+          <p className="text-primary-100 mt-0.5 text-xs opacity-90 italic">"Ilmu Tanpa Adab Bak Pohon Tak Berbuah"</p>
         </div>
         <div className="flex-1 flex justify-center py-2 md:py-0">
-          <nav className="flex items-center bg-teal-900/40 p-1 rounded-full border border-teal-700/50">
+          <nav className="flex items-center bg-primary-900/40 p-1 rounded-full border border-primary-700/50">
             {[
               { id: 1, label: 'Identitas', icon: <FileText size={14} /> },
               { id: 2, label: 'Isi Modul', icon: <Layout size={14} /> },
@@ -357,8 +435,8 @@ export default function App() {
                 onClick={() => setStep(navStep.id as 1 | 2 | 3)}
                 className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold transition-all whitespace-nowrap ${
                   step === navStep.id 
-                    ? 'bg-teal-500 text-white shadow-sm shadow-teal-900' 
-                    : 'text-teal-200 hover:text-white hover:bg-white/5'
+                    ? 'bg-primary-500 text-white shadow-sm shadow-primary-900' 
+                    : 'text-primary-200 hover:text-white hover:bg-white/5'
                 }`}
               >
                 {navStep.icon}
@@ -376,12 +454,26 @@ export default function App() {
               <ArrowLeft size={14} /> Kembali
             </button>
           )}
+          <button 
+            onClick={handleLogout}
+            className="bg-red-500/20 hover:bg-red-500/40 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 border border-red-400/30"
+            title="Keluar dari Aplikasi"
+          >
+            <LogOut size={14} /> <span className="hidden sm:inline">Keluar</span>
+          </button>
+          <button 
+            onClick={handlePrint}
+            className="bg-primary-700/50 hover:bg-primary-700 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 border border-primary-600/30"
+            title="Cetak Halaman Ini"
+          >
+            <Printer size={14} /> <span className="hidden sm:inline">Cetak Halaman</span>
+          </button>
           {step === 3 && (
-            <div className="flex gap-2 bg-teal-900/40 p-1 rounded-full border border-teal-700/50">
+            <div className="flex gap-2 bg-primary-900/40 p-1 rounded-full border border-primary-700/50">
               <button 
                 onClick={exportToPdf}
                 disabled={isExporting}
-                className={`bg-white text-teal-900 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95 ${isExporting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-teal-50 hover:shadow-md'}`}
+                className={`bg-white text-primary-900 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95 ${isExporting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-50 hover:shadow-md'}`}
                 title="Simpan Modul sebagai PDF"
               >
                 {isExporting ? <Loader2 className="animate-spin" size={14} /> : <Printer size={14} />} 
@@ -390,7 +482,7 @@ export default function App() {
               <button 
                 onClick={exportToWord}
                 disabled={isExporting}
-                className={`bg-teal-600 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 ${isExporting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-teal-500 shadow-sm'}`}
+                className={`bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 ${isExporting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-500 shadow-sm'}`}
                 title="Ekspor Ke MS Word"
               >
                 <FileText size={14} /> Word
@@ -409,6 +501,7 @@ export default function App() {
               onNext={() => setStep(2)} 
               onPrint={handlePrint}
               onReset={handleReset}
+              onLogout={handleLogout}
             />
           </div>
         )}

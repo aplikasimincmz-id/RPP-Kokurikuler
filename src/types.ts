@@ -1,3 +1,8 @@
+export interface ThemeSettings {
+  mode: 'light' | 'dark' | 'system';
+  primaryColor: 'teal' | 'blue' | 'indigo' | 'purple' | 'emerald';
+}
+
 export interface ModuleData {
   // Identity
   nama_madrasah: string;
