@@ -391,6 +391,14 @@ export default function App() {
       {/* Sidebar - Left Menu */}
       <aside className="w-full md:w-72 bg-primary-800 dark:bg-primary-950 text-white p-6 flex flex-col sticky top-0 h-auto md:h-screen z-40 print:hidden transition-colors duration-300 shadow-xl overflow-y-auto">
         <div className="mb-8">
+          <div className="mb-6 flex justify-center">
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Kementerian_Agama_new_logo.png" 
+              alt="Logo Kementerian Agama" 
+              className="h-24 w-auto object-contain drop-shadow-md brightness-110"
+              referrerPolicy="no-referrer"
+            />
+          </div>
           <h1 className="text-xl font-extrabold flex items-center gap-2 text-white">
             <Heart className="fill-red-400 text-red-400 animate-pulse" size={24} /> 
             <span>RPP Kokurikuler</span>

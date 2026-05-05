@@ -122,16 +122,16 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit }) => {
   };
 
   return (
-    <div id="printable-module" className="bg-white dark:bg-neutral-900 p-8 shadow-lg border border-gray-200 dark:border-neutral-800 text-gray-800 dark:text-neutral-200 font-sans leading-relaxed max-w-[21cm] mx-auto mb-10 overflow-hidden transition-colors duration-300">
+    <div id="printable-module" className="bg-white dark:bg-neutral-900 p-8 md:p-12 shadow-lg border border-gray-200 dark:border-neutral-800 text-gray-900 dark:text-neutral-200 font-sans leading-relaxed max-w-[21cm] mx-auto mb-10 overflow-hidden transition-colors duration-300 print:shadow-none print:border-none print:p-0">
       {/* Header with Logo and Madrasah Name */}
-      <div className="flex items-center gap-6 border-b-2 border-double border-gray-800 dark:border-neutral-100 pb-4 mb-6">
+      <div className="flex items-center gap-6 border-b-4 border-double border-black dark:border-neutral-100 pb-4 mb-6">
         {data.logo_url && (
-          <img src={data.logo_url} alt="Logo" className="w-16 h-16 object-contain" />
+          <img src={data.logo_url} alt="Logo" className="w-20 h-20 object-contain print:brightness-0" />
         )}
         <div className="flex-1 text-center">
-          <h1 className="text-xl font-bold uppercase dark:text-white">Perencanaan Kokurikuler</h1>
-          <p className="text-lg font-serif italic text-primary-800 dark:text-primary-400 transition-colors">Kurikulum Berbasis Cinta (KBC)</p>
-          <p className="text-sm font-bold uppercase tracking-wider dark:text-neutral-400">{data.nama_madrasah}</p>
+          <h1 className="text-2xl font-bold uppercase dark:text-white text-black">Perencanaan Proyek Kokurikuler</h1>
+          <p className="text-lg font-serif italic text-primary-800 dark:text-primary-400 transition-colors print:text-black">Kurikulum Berbasis Cinta (KBC)</p>
+          <p className="text-base font-bold uppercase tracking-wider dark:text-neutral-400 text-gray-900">{data.nama_madrasah}</p>
         </div>
       </div>
 
@@ -378,31 +378,31 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit }) => {
         </h2>
         <div className="space-y-8">
           {/* Formatif Table: Catatan Anekdotal */}
-          <div>
-            <div className="flex justify-between items-end mb-2 border-b-2 border-primary-800 dark:border-primary-400 pb-1 transition-colors">
-              <h3 className="text-sm font-bold text-primary-900 dark:text-primary-300 uppercase transition-colors">Lampiran 1: Instrumen Penilaian Formatif (Catatan Anekdotal)</h3>
-              <p className="text-[9px] italic text-gray-500 dark:text-neutral-600">Metode: Observasi & Dokumentasi Perilaku</p>
+          <div className="page-break-before">
+            <div className="flex justify-between items-end mb-3 border-b-2 border-black pb-1 transition-colors">
+              <h3 className="text-base font-bold text-black uppercase">Lampiran 1: Instrumen Penilaian Formatif (Catatan Anekdotal)</h3>
+              <p className="text-[10px] italic text-gray-600">Metode: Observasi & Dokumentasi Perilaku</p>
             </div>
-            <table className="w-full border-collapse border border-gray-800 dark:border-neutral-100 text-[10px] lampiran-table transition-colors">
+            <table className="w-full border-collapse border-2 border-black text-[11px] lampiran-table">
               <thead>
-                <tr className="bg-primary-800 text-white uppercase text-[9px] text-center transition-colors">
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-8" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>No</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-28" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Hari/Tanggal</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-32" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Nama Murid</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-28" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Aspek Diamati</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Catatan Kejadian / Perilaku</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Tindak Lanjut Guru</th>
+                <tr className="bg-primary-800 text-white uppercase text-[10px] text-center">
+                  <th className="border-2 border-black p-2 w-10">No</th>
+                  <th className="border-2 border-black p-2 w-32">Hari/Tanggal</th>
+                  <th className="border-2 border-black p-2 w-40">Nama Murid</th>
+                  <th className="border-2 border-black p-2 w-36">Aspek Diamati</th>
+                  <th className="border-2 border-black p-2">Catatan Kejadian / Perilaku</th>
+                  <th className="border-2 border-black p-2 w-40">Tindak Lanjut Guru</th>
                 </tr>
               </thead>
               <tbody>
-                {[1, 2, 3].map(i => (
-                  <tr key={i} className="h-10 dark:bg-neutral-800/30">
-                    <td className="border border-gray-800 dark:border-neutral-100 p-1 text-center font-mono dark:text-neutral-300">{i}</td>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-1"></td>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-1"></td>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-1 text-[9px]"></td>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-1 text-gray-400 dark:text-neutral-500 italic text-[9px]">... deskripsi perilaku murid ...</td>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-1"></td>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <tr key={i} className="h-12">
+                    <td className="border border-black p-2 text-center font-mono">{i}</td>
+                    <td className="border border-black p-2"></td>
+                    <td className="border border-black p-2"></td>
+                    <td className="border border-black p-2"></td>
+                    <td className="border border-black p-2 text-gray-400 italic text-[10px]">... deskripsi perilaku murid ...</td>
+                    <td className="border border-black p-2"></td>
                   </tr>
                 ))}
               </tbody>
@@ -410,20 +410,20 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit }) => {
           </div>
 
           {/* Summative Table: Rubrik Penilaian Kinerja */}
-          <div>
-            <div className="flex justify-between items-end mb-2 border-b border-gray-800 dark:border-neutral-100 pb-1 transition-colors">
-              <h3 className="text-sm font-bold text-primary-900 dark:text-primary-300 uppercase transition-colors">Lampiran 2: Instrumen Penilaian Sumatif (Rubrik Penilaian Kinerja)</h3>
-              <p className="text-[9px] italic text-gray-500 dark:text-neutral-600">Objek: Proyek "{data.nama_kegiatan}"</p>
+          <div className="page-break-before">
+            <div className="flex justify-between items-end mb-3 border-b-2 border-black pb-1 transition-colors">
+              <h3 className="text-base font-bold text-black uppercase">Lampiran 2: Instrumen Penilaian Sumatif (Rubrik Penilaian Kinerja)</h3>
+              <p className="text-[10px] italic text-gray-600">Objek: Proyek "{data.nama_kegiatan}"</p>
             </div>
-            <table className="w-full border-collapse border border-gray-800 dark:border-neutral-100 text-[9px] lampiran-table transition-colors">
+            <table className="w-full border-collapse border-2 border-black text-[10px] lampiran-table">
               <thead>
-                <tr className="bg-primary-800 text-white uppercase font-bold text-center transition-colors">
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-24" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Indikator (DPL/KBC)</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-32" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Bukti Pencapaian</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Mulai Berkembang (1)</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Sedang Berkembang (2)</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Berkembang Sesuai Harapan (3)</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Sangat Berkembang (4)</th>
+                <tr className="bg-primary-800 text-white uppercase font-bold text-center">
+                  <th className="border-2 border-black p-2 w-28">Indikator (DPL/KBC)</th>
+                  <th className="border-2 border-black p-2 w-32">Bukti Pencapaian</th>
+                  <th className="border-2 border-black p-2">Mulai Berkembang (1)</th>
+                  <th className="border-2 border-black p-2">Sedang Berkembang (2)</th>
+                  <th className="border-2 border-black p-2">Berkembang Sesuai Harapan (3)</th>
+                  <th className="border-2 border-black p-2">Sangat Berkembang (4)</th>
                 </tr>
               </thead>
               <tbody>
@@ -432,68 +432,68 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit }) => {
                     const content = rubricContent[item];
                     const label = item.includes('.') ? item.split('. ')[1] : item;
                     return (
-                      <tr key={index} className={index % 2 === 0 ? "dark:bg-neutral-800/30" : "bg-primary-50 dark:bg-primary-900/10"}>
-                        <td className="border border-gray-800 dark:border-neutral-100 p-2 font-bold text-primary-900 dark:text-primary-300 transition-colors">{label}</td>
-                        <td className="border border-gray-800 dark:border-neutral-100 p-2 font-medium dark:text-neutral-400">{content.aspect}</td>
-                        <td className="border border-gray-800 dark:border-neutral-100 p-2 text-center text-gray-400"></td>
-                        <td className="border border-gray-800 dark:border-neutral-100 p-2 text-center text-gray-400"></td>
-                        <td className="border border-gray-800 dark:border-neutral-100 p-2 text-center text-gray-400"></td>
-                        <td className="border border-gray-800 dark:border-neutral-100 p-2 text-center text-gray-400"></td>
+                      <tr key={index} className="h-16">
+                        <td className="border border-black p-2 font-bold text-black bg-gray-50/50">{label}</td>
+                        <td className="border border-black p-2 font-medium">{content.aspect}</td>
+                        <td className="border border-black p-2 text-center text-gray-300"></td>
+                        <td className="border border-black p-2 text-center text-gray-300"></td>
+                        <td className="border border-black p-2 text-center text-gray-300"></td>
+                        <td className="border border-black p-2 text-center text-gray-300"></td>
                       </tr>
                     );
                   })
                 ) : (
                   <tr>
-                    <td colSpan={6} className="border border-gray-800 dark:border-neutral-100 p-4 text-center italic text-gray-500 dark:text-neutral-600">Pilih Dimensi atau Topik KBC untuk melihat rubrik spesifik.</td>
+                    <td colSpan={6} className="border border-black p-6 text-center italic text-gray-500">Pilih Dimensi atau Topik KBC untuk melihat rubrik spesifik.</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
-          <div>
-            <h3 className="text-sm mb-2 uppercase font-bold text-primary-800 dark:text-primary-300 transition-colors">Lampiran 3: Penjelasan Detail Topik Panca Cinta (KBC)</h3>
-            <table className="w-full border-collapse border border-gray-800 dark:border-neutral-100 text-[10px] lampiran-table transition-colors">
+          <div className="page-break-before">
+            <h3 className="text-base mb-3 uppercase font-bold text-black border-b-2 border-black pb-1">Lampiran 3: Penjelasan Detail Topik Panca Cinta (KBC)</h3>
+            <table className="w-full border-collapse border-2 border-black text-[11px] lampiran-table">
               <thead>
-                <tr className="bg-primary-800 text-white uppercase font-bold transition-colors">
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 w-32 text-left" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Topik Panca Cinta</th>
-                  <th className="border border-gray-800 dark:border-neutral-100 p-2 text-left" style={{ backgroundColor: 'var(--primary-800)', color: '#ffffff' }}>Deskripsi & Internalisasi Nilai</th>
+                <tr className="bg-primary-800 text-white uppercase font-bold">
+                  <th className="border-2 border-black p-3 w-40 text-left">Topik Panca Cinta</th>
+                  <th className="border-2 border-black p-3 text-left">Deskripsi & Internalisasi Nilai</th>
                 </tr>
               </thead>
               <tbody>
                 {selectedKBC.length > 0 ? selectedKBC.map((topic, i) => (
-                  <tr key={i} className={i % 2 === 1 ? "bg-primary-50 dark:bg-primary-900/10" : "dark:bg-neutral-800/30"}>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-2 font-bold text-primary-900 dark:text-primary-300 transition-colors" id={`desc-${topic.split('.')[0]}`}>
+                  <tr key={i} className="h-auto">
+                    <td className="border border-black p-3 font-bold text-black bg-gray-50/50" id={`desc-${topic.split('.')[0]}`}>
                       {topic.includes('. ') ? topic.split('. ')[1] : topic}
                     </td>
-                    <td className="border border-gray-800 dark:border-neutral-100 p-2 text-justify leading-relaxed dark:text-neutral-300">
+                    <td className="border border-black p-3 text-justify leading-relaxed">
                       {kbcTopicDescriptions[topic] || "Penjelasan topik sedang dikembangkan untuk mendukung integrasi nilai-nilai Panca Cinta dalam modul ini."}
                     </td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={2} className="border border-gray-800 dark:border-neutral-100 p-4 text-center italic text-gray-500 dark:text-neutral-600">Tidak ada topik KBC yang dipilih.</td>
+                    <td colSpan={2} className="border border-black p-6 text-center italic text-gray-500">Tidak ada topik KBC yang dipilih.</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
-          <div>
-            <h3 className="text-sm mb-2 uppercase font-bold text-primary-800 dark:text-primary-300 transition-colors">Lampiran 4: Panduan Observasi & Refleksi</h3>
-            <table className="w-full border-collapse border border-gray-800 dark:border-neutral-100 text-[10px] lampiran-table transition-colors">
+          <div className="page-break-before">
+            <h3 className="text-base mb-3 uppercase font-bold text-black border-b-2 border-black pb-1">Lampiran 4: Panduan Observasi & Refleksi</h3>
+            <table className="w-full border-collapse border-2 border-black text-[11px] lampiran-table">
               <tbody>
                 <tr>
-                  <td className="border border-gray-800 dark:border-neutral-100 p-3 w-1/2 bg-gray-50 dark:bg-neutral-800/50">
-                    <h4 className="font-bold text-[11px] mb-1 uppercase text-primary-800 dark:text-primary-400 transition-colors">Panduan Observasi Guru</h4>
-                    <p className="italic text-gray-700 dark:text-neutral-400 leading-relaxed">
-                      Guru mengamati perilaku murid selama kegiatan. Catat perubahan sikap yang signifikan terkait adab, kemandirian, dan antusiasme dalam belajar sebagai wujud cinta ilmu dan lingkungan.
+                  <td className="border-2 border-black p-4 w-1/2 bg-gray-50/50">
+                    <h4 className="font-bold text-xs mb-2 uppercase text-black">A. Panduan Observasi Guru</h4>
+                    <p className="italic text-gray-800 leading-relaxed text-justify">
+                      Guru mengamati perilaku murid selama kegiatan. Fokus pengamatan pada perubahan sikap yang signifikan terkait adab, kemandirian, dan antusiasme dalam belajar sebagai wujud cinta ilmu dan lingkungan. Catat hal-hal positif yang muncul sebagai dasar bimbingan berkelanjutan.
                     </p>
                   </td>
-                  <td className="border border-gray-800 dark:border-neutral-100 p-3 w-1/2 dark:bg-neutral-900/30">
-                    <h4 className="font-bold text-[11px] mb-1 uppercase text-primary-800 dark:text-primary-400 transition-colors">Lembar Refleksi Murid</h4>
-                    <p className="italic text-gray-700 dark:text-neutral-400 leading-relaxed">
-                      Pancingan Refleksi: "Apa yang paling aku syukuri hari ini?", "Bagaimana perasaanku saat berhasil membantu tanaman?", "Adab apa yang sudah aku praktikkan hari ini?"
+                  <td className="border-2 border-black p-4 w-1/2">
+                    <h4 className="font-bold text-xs mb-2 uppercase text-black">B. Lembar Refleksi Murid</h4>
+                    <p className="italic text-gray-800 leading-relaxed text-justify">
+                      Pancingan Refleksi untuk Murid: "Apa yang paling aku syukuri hari ini saat berkegiatan?", "Bagaimana perasaanku saat berhasil menyelesaikan tantangan proyek?", "Adab dan kasih sayang apa yang sudah aku praktikkan hari ini kepada teman atau lingkungan?"
                     </p>
                   </td>
                 </tr>
