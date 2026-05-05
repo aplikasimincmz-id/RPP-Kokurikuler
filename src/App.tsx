@@ -401,7 +401,7 @@ export default function App() {
           </div>
           <h1 className="text-xl font-extrabold flex items-center gap-2 text-white">
             <Heart className="fill-red-400 text-red-400 animate-pulse" size={24} /> 
-            <span>RPP Kokurikuler</span>
+            <span>RPP Kokurikuler <span className="text-[10px] font-normal px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30 ml-1">PROTOTYPE</span></span>
           </h1>
           <p className="text-primary-100 mt-2 text-[10px] opacity-80 italic leading-tight">
             "Ilmu Tanpa Adab Bak Pohon Tak Berbuah"
