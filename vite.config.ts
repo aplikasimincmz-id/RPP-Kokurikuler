@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       assetsDir: 'assets',
       emptyOutDir: true,
+      chunkSizeWarningLimit: 2000,
     },
     server: {
       port: 3000,
