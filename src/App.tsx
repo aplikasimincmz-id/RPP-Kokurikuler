@@ -81,6 +81,7 @@ export default function App() {
   ]);
   const [showPageNumbers, setShowPageNumbers] = useState(true);
   const [showPdfOptions, setShowPdfOptions] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [notification, setNotification] = useState<{ message: string; show: boolean }>({ message: '', show: false });
 
   const [data, setData] = useState<ModuleData>(() => {
@@ -124,6 +125,10 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem('kbc_logged_in');
     setIsLoggedIn(false);
     window.location.reload();
@@ -770,6 +775,46 @@ export default function App() {
               <span className="font-bold text-sm">{notification.message}</span>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Logout Confirmation Modal */}
+      <AnimatePresence>
+        {showLogoutConfirm && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:hidden">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl p-6 max-w-md w-full border border-neutral-200 dark:border-neutral-800"
+            >
+              <div className="flex items-center gap-3 mb-4 text-red-600 dark:text-red-400">
+                <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full">
+                  <LogOut size={24} />
+                </div>
+                <h3 className="text-xl font-bold">Konfirmasi Keluar</h3>
+              </div>
+              
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Apakah Anda yakin ingin keluar? Pastikan Anda sudah menyimpan perubahan data Anda agar tidak hilang.
+              </p>
+              
+              <div className="flex gap-3 justify-end">
+                <button 
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="px-6 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 font-bold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  Batal
+                </button>
+                <button 
+                  onClick={confirmLogout}
+                  className="px-6 py-2.5 rounded-xl bg-red-600 text-white font-bold text-sm hover:bg-red-700 shadow-lg shadow-red-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  Ya, Keluar
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
