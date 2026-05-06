@@ -111,7 +111,7 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
   const getSectionHeader = (index: number) => {
     const letter = String.fromCharCode(65 + index);
     return (
-      <h2 className="bg-teal-600 print:bg-teal-700 text-white px-3 py-2 font-bold text-base mb-4 flex justify-between items-center group transition-colors rounded">
+      <h2 className="bg-primary-600 print:bg-primary-700 text-white px-3 py-2 font-bold text-base mb-4 flex justify-between items-center group transition-colors rounded">
         <span>{letter}. {sections[index]}</span>
         <button 
           onClick={() => onEdit(index)}
@@ -144,7 +144,7 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
                     <tr key={i}>
                       <td className="w-48 font-semibold text-gray-800 dark:text-gray-200 py-0.5">{row.label}</td>
                       <td className="w-4 py-0.5 text-center">:</td>
-                      <td className={`py-0.5 ${row.bold ? 'font-bold text-teal-800 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                      <td className={`py-0.5 ${row.bold ? 'font-bold text-primary-800 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300'}`}>
                         {row.value || "-"}
                       </td>
                     </tr>
@@ -397,7 +397,7 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
                 <tbody>
                   {[1, 2, 3, 4, 5, 6].map(i => (
                     <tr key={i} className="h-10">
-                      <td className="text-center font-mono">{i}</td>
+                      <td className="text-center">{i}</td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -506,11 +506,11 @@ export const ModulePreview: React.FC<PreviewProps> = ({ data, onEdit, pdfSection
   };
 
   return (
-    <div id="printable-module" className="bg-white dark:bg-neutral-900 p-8 md:p-12 shadow-lg border border-gray-200 dark:border-neutral-800 text-gray-900 dark:text-neutral-200 font-sans leading-relaxed max-w-[21cm] mx-auto mb-10 overflow-hidden transition-colors duration-300 print:shadow-none print:border-none print:p-0 relative">
+    <div id="printable-module" className="bg-card-bg p-8 md:p-12 shadow-lg border border-card-border text-app-text formal-document font-sans leading-relaxed max-w-[21cm] mx-auto mb-10 overflow-hidden transition-colors duration-300 print:shadow-none print:border-none print:p-0 relative">
       {showPageNumbers && <div className="print-page-number" />}
       
       {/* Header with Logo and Madrasah Name */}
-      <div className="flex items-center gap-6 border-b-4 border-double border-black dark:border-neutral-100 pb-4 mb-6">
+      <div className="flex items-center gap-6 border-b-4 border-double border-black dark:border-app-text pb-4 mb-6">
         {data.logo_url && (
           <img src={data.logo_url} alt="Logo" className="w-20 h-20 object-contain print:brightness-0" />
         )}

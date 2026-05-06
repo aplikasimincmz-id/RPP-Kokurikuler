@@ -130,7 +130,7 @@ export const IdentityForm: React.FC<IdentityFormProps> = ({ data, onChange, onNe
           <button 
             type="button"
             onClick={onPrint}
-            className="px-3 py-1.5 border border-gray-400 dark:border-neutral-700 text-gray-700 dark:text-neutral-300 rounded-full text-xs font-bold hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+            className="px-3 py-1.5 border border-primary-600 text-primary-600 dark:text-primary-400 rounded-full text-xs font-bold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors flex items-center gap-1.5"
           >
             <Printer size={14} /> Cetak
           </button>

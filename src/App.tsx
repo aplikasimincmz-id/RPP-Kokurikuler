@@ -300,16 +300,17 @@ export default function App() {
             margin: 56.7pt 56.7pt 56.7pt 56.7pt;
           }
           div.Section1 { page: Section1; }
-          body { font-family: 'Times New Roman', serif; line-height: 1.2; color: #000000; }
-          table { border-collapse: collapse; width: 100%; margin-bottom: 12pt; border: 1px solid #000000; }
-          th, td { border: 1px solid #000000; padding: 5pt; vertical-align: top; font-size: 10pt; }
+          body, p, span, td, th, h1, h2, h3 { font-family: 'Times New Roman', Times, serif; }
+          body { line-height: 1.5; color: #000000; }
+          table { border-collapse: collapse; width: 100%; margin-bottom: 12pt; border: 1pt solid #000000; }
+          th, td { border: 1pt solid #000000; padding: 6pt; vertical-align: top; font-size: 11pt; }
           .bg-teal-900, .bg-teal-800 { background-color: #134e4a !important; color: #ffffff !important; }
           .text-teal-900 { color: #134e4a !important; }
           .font-bold { font-weight: bold; }
           .uppercase { text-transform: uppercase; }
           .text-center { text-align: center; }
-          h2 { font-size: 12pt; background-color: #134e4a !important; color: #ffffff !important; font-weight: bold; padding: 5pt; margin-top: 15pt; text-align: center; }
-          h3 { font-size: 11pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; color: #134e4a; }
+          h2 { font-size: 12pt; background-color: #134e4a !important; color: #ffffff !important; font-weight: bold; padding: 6pt; margin-top: 18pt; text-align: center; }
+          h3 { font-size: 11pt; font-weight: bold; margin-top: 14pt; margin-bottom: 8pt; color: #134e4a; }
           .lampiran-table th { background-color: #134e4a !important; color: #ffffff !important; font-weight: bold; }
         </style>
       </head>
@@ -359,9 +360,10 @@ export default function App() {
             mso-paper-source: 0;
           }
           div.Section1 { page: Section1; }
-          body { font-family: 'Times New Roman', serif; line-height: 1.2; color: #000000; }
-          table { border-collapse: collapse; width: 100%; margin-bottom: 12pt; border: 1px solid #000000; }
-          th, td { border: 1px solid #000000; padding: 5pt; vertical-align: top; font-size: 10pt; }
+          body, p, span, td, th, h1, h2, h3 { font-family: 'Times New Roman', Times, serif; }
+          body { line-height: 1.5; color: #000000; }
+          table { border-collapse: collapse; width: 100%; margin-bottom: 12pt; border: 1pt solid #000000; }
+          th, td { border: 1pt solid #000000; padding: 5pt; vertical-align: top; font-size: 11pt; }
           
           /* Colors */
           .bg-teal-700, .bg-teal-800, .bg-teal-900 { background-color: #134e4a !important; color: #ffffff !important; }
@@ -432,7 +434,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
+    <div className="flex flex-col md:flex-row min-h-screen bg-app-bg transition-colors duration-300">
       {/* Sidebar - Left Menu */}
       <aside className="w-full md:w-72 bg-primary-800 dark:bg-primary-950 text-white p-6 flex flex-col sticky top-0 h-auto md:h-screen z-40 print:hidden transition-colors duration-300 shadow-xl overflow-y-auto">
         <div className="mb-8">
@@ -482,10 +484,10 @@ export default function App() {
           
           <button 
             onClick={handleSave}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-teal-500/20 border border-transparent hover:border-teal-500/30"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-primary-500/20 border border-transparent hover:border-primary-500/30"
             title="Simpan Modul (Local Storage)"
           >
-            <div className="text-teal-400">
+            <div className="text-primary-400">
               <Save size={18} />
             </div>
             Simpan Modul
@@ -493,10 +495,10 @@ export default function App() {
 
           <button 
             onClick={handlePrint}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-blue-500/20 border border-transparent hover:border-blue-500/30"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-primary-500/20 border border-transparent hover:border-primary-500/30"
             title="Cetak Halaman (Print)"
           >
-            <div className="text-blue-400">
+            <div className="text-primary-400">
               <Printer size={18} />
             </div>
             Cetak Langsung
@@ -597,6 +599,18 @@ export default function App() {
                   <FileText size={18} />
                 </div>
                 Ekspor Word
+              </button>
+
+              <button 
+                onClick={exportAppendixToWord}
+                disabled={isExporting}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-primary-200 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/20 disabled:opacity-50"
+                title="Ekspor Lampiran ke Word"
+              >
+                <div className="text-orange-400">
+                  <FileText size={18} />
+                </div>
+                Ekspor Lampiran (Word)
               </button>
             </>
           )}
@@ -743,12 +757,25 @@ export default function App() {
               showPageNumbers={showPageNumbers}
             />
             
-            <div className="mt-8 flex justify-center pb-8 print:hidden">
+            <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 pb-8 print:hidden">
+              <button 
+                onClick={exportToPdf}
+                disabled={isExporting}
+                className="flex items-center gap-2 px-8 py-3 bg-primary-600 text-white rounded-full font-bold hover:bg-primary-700 transition-all shadow-lg active:scale-95 group disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isExporting ? (
+                  <Loader2 size={20} className="animate-spin" />
+                ) : (
+                  <Download size={20} className="group-hover:translate-y-0.5 transition-transform" />
+                )}
+                {isExporting ? 'Memproses PDF...' : 'Simpan sebagai PDF'}
+              </button>
+
               <button 
                 onClick={exportAppendixToWord}
-                className="flex items-center gap-2 px-8 py-3 bg-white text-teal-700 border-2 border-teal-600 rounded-full font-bold hover:bg-teal-600 hover:text-white transition-all shadow-lg active:scale-95 group"
+                className="flex items-center gap-2 px-8 py-3 bg-white text-primary-700 border-2 border-primary-600 rounded-full font-bold hover:bg-primary-600 hover:text-white transition-all shadow-lg active:scale-95 group"
               >
-                <Download size={20} className="group-hover:bounce" />
+                <FileText size={20} className="group-hover:scale-110 transition-transform" />
                 Unduh Lampiran (Word)
               </button>
             </div>
@@ -770,8 +797,8 @@ export default function App() {
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
           >
-            <div className="bg-teal-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 border border-teal-500/30 whitespace-nowrap">
-              <CheckCircle size={20} className="text-teal-400" />
+            <div className="bg-primary-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 border border-primary-500/30 whitespace-nowrap">
+              <CheckCircle size={20} className="text-primary-400" />
               <span className="font-bold text-sm">{notification.message}</span>
             </div>
           </motion.div>
@@ -786,7 +813,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl p-6 max-w-md w-full border border-neutral-200 dark:border-neutral-800"
+              className="bg-card-bg rounded-2xl shadow-2xl p-6 max-w-md w-full border border-card-border"
             >
               <div className="flex items-center gap-3 mb-4 text-red-600 dark:text-red-400">
                 <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full">
@@ -795,14 +822,14 @@ export default function App() {
                 <h3 className="text-xl font-bold">Konfirmasi Keluar</h3>
               </div>
               
-              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+              <p className="text-app-text opacity-80 mb-6 leading-relaxed">
                 Apakah Anda yakin ingin keluar? Pastikan Anda sudah menyimpan perubahan data Anda agar tidak hilang.
               </p>
               
               <div className="flex gap-3 justify-end">
                 <button 
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="px-6 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 font-bold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="px-6 py-2.5 rounded-xl border border-card-border text-app-text font-bold text-sm hover:bg-app-bg transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Batal
                 </button>

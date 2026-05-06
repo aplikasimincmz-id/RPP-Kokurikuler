@@ -10,88 +10,33 @@ interface ThemeSettingsProps {
 
 const colorSchemes = [
   { id: 'teal', label: 'Teal', bg: 'bg-teal-500', 
-    vars: {
-      '--primary-50': '#f0fdfa',
-      '--primary-100': '#ccfbf1',
-      '--primary-200': '#99f6e4',
-      '--primary-300': '#5eead4',
-      '--primary-400': '#2dd4bf',
-      '--primary-500': '#14b8a6',
-      '--primary-600': '#0d9488',
-      '--primary-700': '#0f766e',
-      '--primary-800': '#115e59',
-      '--primary-900': '#134e4a',
-      '--primary-950': '#042f2e',
-    }
+    colors: ['#f0fdfa', '#ccfbf1', '#99f6e4', '#5eead4', '#2dd4bf', '#14b8a6', '#0d9488', '#0f766e', '#115e59', '#134e4a', '#042f2e']
   },
   { id: 'blue', label: 'Blue', bg: 'bg-blue-500',
-    vars: {
-      '--primary-50': '#eff6ff',
-      '--primary-100': '#dbeafe',
-      '--primary-200': '#bfdbfe',
-      '--primary-300': '#93c5fd',
-      '--primary-400': '#60a5fa',
-      '--primary-500': '#3b82f6',
-      '--primary-600': '#2563eb',
-      '--primary-700': '#1d4ed8',
-      '--primary-800': '#1e40af',
-      '--primary-900': '#1e3a8a',
-      '--primary-950': '#172554',
-    }
+    colors: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a', '#172554']
   },
   { id: 'indigo', label: 'Indigo', bg: 'bg-indigo-500',
-    vars: {
-      '--primary-50': '#eef2ff',
-      '--primary-100': '#e0e7ff',
-      '--primary-200': '#c7d2fe',
-      '--primary-300': '#a5b4fc',
-      '--primary-400': '#818cf8',
-      '--primary-500': '#6366f1',
-      '--primary-600': '#4f46e5',
-      '--primary-700': '#4338ca',
-      '--primary-800': '#3730a3',
-      '--primary-900': '#312e81',
-      '--primary-950': '#1e1b4b',
-    }
+    colors: ['#eef2ff', '#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1', '#4f46e5', '#4338ca', '#3730a3', '#312e81', '#1e1b4b']
   },
   { id: 'purple', label: 'Purple', bg: 'bg-purple-500',
-    vars: {
-      '--primary-50': '#faf5ff',
-      '--primary-100': '#f3e8ff',
-      '--primary-200': '#e9d5ff',
-      '--primary-300': '#d8b4fe',
-      '--primary-400': '#c084fc',
-      '--primary-500': '#a855f7',
-      '--primary-600': '#9333ea',
-      '--primary-700': '#7e22ce',
-      '--primary-800': '#6b21a8',
-      '--primary-900': '#581c87',
-      '--primary-950': '#3b0764',
-    }
+    colors: ['#faf5ff', '#f3e8ff', '#e9d5ff', '#d8b4fe', '#c084fc', '#a855f7', '#9333ea', '#7e22ce', '#6b21a8', '#581c87', '#3b0764']
   },
   { id: 'emerald', label: 'Emerald', bg: 'bg-emerald-500',
-    vars: {
-      '--primary-50': '#ecfdf5',
-      '--primary-100': '#d1fae5',
-      '--primary-200': '#a7f3d0',
-      '--primary-300': '#6ee7b7',
-      '--primary-400': '#34d399',
-      '--primary-500': '#10b981',
-      '--primary-600': '#059669',
-      '--primary-700': '#047857',
-      '--primary-800': '#065f46',
-      '--primary-900': '#064e3b',
-      '--primary-950': '#022c22',
-    }
+    colors: ['#ecfdf5', '#d1fae5', '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857', '#065f46', '#064e3b', '#022c22']
   }
+];
+
+const paletteKeys = [
+  '--primary-50', '--primary-100', '--primary-200', '--primary-300', '--primary-400',
+  '--primary-500', '--primary-600', '--primary-700', '--primary-800', '--primary-900', '--primary-950'
 ];
 
 export const ThemeSettingsComponent: React.FC<ThemeSettingsProps> = ({ settings, onChange }) => {
   const applyColors = (schemeId: string) => {
     const scheme = colorSchemes.find(s => s.id === schemeId);
     if (scheme) {
-      Object.entries(scheme.vars).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value);
+      scheme.colors.forEach((value, index) => {
+        document.documentElement.style.setProperty(paletteKeys[index], value);
       });
       onChange({ ...settings, primaryColor: schemeId as any });
     }
