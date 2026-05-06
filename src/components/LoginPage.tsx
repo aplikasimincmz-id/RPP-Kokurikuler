@@ -47,23 +47,29 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             </svg>
           </div>
 
-          <motion.img 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Kementerian_Agama_new_logo.png" 
-            alt="Logo Kemenag" 
-            className="w-24 h-24 mx-auto mb-6 drop-shadow-lg relative z-10"
-          />
+          <div className="flex justify-center mb-6 relative z-10">
+            <div className="p-4 bg-white/20 rounded-full backdrop-blur-md border border-white/30">
+              <Lock className="text-white" size={48} />
+            </div>
+          </div>
           <h1 className="text-2xl font-extrabold text-white leading-tight relative z-10 mb-2">
-            Selamat datang di Aplikasi Generate RPP Kokurikuler
+            Aplikasi Generate RPP Kokurikuler
           </h1>
+          <div className="bg-amber-400 text-amber-950 text-[10px] font-bold py-1 px-3 rounded-full inline-block mb-3 relative z-10 uppercase tracking-wider">
+            Prototype / Unofficial Tool
+          </div>
           <p className="text-primary-100 text-sm italic opacity-80 relative z-10">
             "Membangun Generasi Beradab & Cinta Ilahi"
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
+          <div className="bg-blue-50 border border-blue-100 p-3 rounded-lg flex items-start gap-2 mb-2">
+            <p className="text-[10px] text-blue-800 leading-tight">
+              <strong>Info:</strong> Aplikasi ini adalah alat bantu prototipe. Data login hanya digunakan untuk sesi lokal Anda.
+            </p>
+          </div>
+
           {error && (
             <motion.div 
               initial={{ opacity: 0, x: -10 }}
