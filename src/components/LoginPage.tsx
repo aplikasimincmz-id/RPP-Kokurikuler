@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Wand2, User, LogIn, Heart, ShieldAlert, Sparkles } from 'lucide-react';
+import { Lock, User, LogIn, Heart, ShieldAlert } from 'lucide-react';
 
 interface LoginPageProps {
   onLogin: () => void;
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [identitas, setIdentitas] = useState('');
-  const [kodeAkses, setKodeAkses] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,10 +19,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     // Simulate brief network delay for feel
     setTimeout(() => {
-      if (identitas === 'admin' && kodeAkses === 'Admin24') {
+      if (username === 'admin' && password === 'Admin24') {
         onLogin();
       } else {
-        setError('Akses ditolak. Silakan periksa kembali data Anda.');
+        setError('Username atau Password salah. Silakan coba lagi.');
         setIsLoading(false);
       }
     }, 800);
@@ -47,29 +47,23 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             </svg>
           </div>
 
-          <div className="flex justify-center mb-6 relative z-10">
-            <div className="p-4 bg-white/20 rounded-full backdrop-blur-md border border-white/30">
-              <Wand2 className="text-white" size={48} />
-            </div>
-          </div>
+          <motion.img 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Kementerian_Agama_new_logo.png" 
+            alt="Logo Kemenag" 
+            className="w-24 h-24 mx-auto mb-6 drop-shadow-lg relative z-10"
+          />
           <h1 className="text-2xl font-extrabold text-white leading-tight relative z-10 mb-2">
-            Penyusun Alat RPP Kokurikuler
+            Selamat datang di Aplikasi Generate RPP Kokurikuler
           </h1>
-          <div className="bg-emerald-400 text-emerald-950 text-[10px] font-bold py-1 px-3 rounded-full inline-block mb-3 relative z-10 uppercase tracking-wider">
-            Alat Bantu Personal (Privat)
-          </div>
-          <p className="text-primary-100 text-[11px] opacity-90 relative z-10 max-w-[200px] mx-auto leading-tight">
-            Gunakan alat ini untuk membantu persiapan teknis pembelajaran.
+          <p className="text-primary-100 text-sm italic opacity-80 relative z-10">
+            "Membangun Generasi Beradab & Cinta Ilahi"
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
-          <div className="bg-amber-50 border border-amber-100 p-3 rounded-lg flex items-start gap-2 mb-2">
-            <p className="text-[10px] text-amber-800 leading-tight">
-              <strong>Pemberitahuan Konten:</strong> Situs ini adalah proyek pribadi non-komersial. Kami tidak berafiliasi dengan institusi pemerintah manapun. Data hanya disimpan di browser Anda.
-            </p>
-          </div>
-
           {error && (
             <motion.div 
               initial={{ opacity: 0, x: -10 }}
@@ -82,30 +76,32 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           )}
 
           <div className="space-y-4">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 slide-in-bottom">
               <label className="text-xs font-bold text-gray-500 uppercase ml-1 flex items-center gap-1.5">
-                <User size={14} /> Nama Identitas
+                <User size={14} /> Username
               </label>
               <input 
                 type="text" 
-                value={identitas}
-                onChange={(e) => setIdentitas(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
-                placeholder="Masukkan identitas alat"
+                autoComplete="username"
+                placeholder="Masukkan username"
                 className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:bg-white outline-none transition-all placeholder:text-gray-300"
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 slide-in-bottom">
               <label className="text-xs font-bold text-gray-500 uppercase ml-1 flex items-center gap-1.5">
-                <Sparkles size={14} /> Kode Akses
+                <Lock size={14} /> Password
               </label>
               <input 
                 type="password" 
-                value={kodeAkses}
-                onChange={(e) => setKodeAkses(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
-                placeholder="Masukkan kode unik"
+                autoComplete="current-password"
+                placeholder="Masukkan password"
                 className="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:bg-white outline-none transition-all placeholder:text-gray-300"
               />
             </div>
@@ -125,7 +121,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               </motion.div>
             ) : (
               <>
-                Mulai Gunakan Alat <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                Login ke Aplikasi <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </>
             )}
           </button>
